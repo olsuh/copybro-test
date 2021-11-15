@@ -1,0 +1,4 @@
+.vscode
+.idea
+partials_c/*.php
+tmp
