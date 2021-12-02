@@ -13,7 +13,7 @@ class User {
         else if ($phone) $where = "phone='".$phone."'";
         else return [];
         // info
-        $q = DB::query("SELECT user_id, first_name, last_name, middle_name, email, gender_id, count_notifications FROM users WHERE ".$where." LIMIT 1;") or die (DB::error());
+        $q = DB::query("SELECT user_id, first_name, last_name, middle_name, phone, email, gender_id, count_notifications FROM users WHERE ".$where." LIMIT 1;") or die (DB::error());
         if ($row = DB::fetch_row($q)) {
             return [
                 'id' => (int) $row['user_id'],
@@ -47,7 +47,7 @@ class User {
         $user_id = $user['id'];
         // create
         if (!$user_id) {
-            DB::query("INSERT INTO users (status_access, phone, created) VALUES ('3', '".$phone."', '".Session::$ts."');") or die (DB::error());
+            DB::query("INSERT INTO users (status_access, phone, created) VALUES ('3', '".$phone."', '".time()."');") or die (DB::error());
             $user_id = DB::insert_id();
         }
         // output
@@ -56,12 +56,24 @@ class User {
 
     // TEST
 
-    public static function owner_info() {
-        // your code here ...
-    }
+    public static function user_update($data = []) {
+        // vars
+        $non_empty_fields = ['first_name', 'last_name', 'phone'];
+        $can_empty_fields = ['middle_name', 'email'];
+        $normalization_fields = ['phone','email'];
+        //normalization, check and prepare
+        $delemiter=', ';
+        $error_data = [];
+        $set_string = fields_setting($data, $non_empty_fields, $can_empty_fields, $error_data, $delemiter, $normalization_fields);
 
-    public static function owner_update($data = []) {
-        // your code here ...
+        if ( $error = fields_error(__METHOD__, $error_data, $set_string) ) return $error;
+
+        $user_id = $data['user_id'];
+        DB::query("UPDATE users SET $set_string WHERE user_id='$user_id' LIMIT 1;") or die (DB::error());
+        return [
+            'message' => 'User::user_update: update the database.',
+            'fields' => $set_string
+        ];
     }
 
 }

@@ -146,10 +146,10 @@ class HTML {
 	private static function write_compiled_resource($params) {
 		if (!@is_writable(self::$compile_dir)) {
 			if (!@is_dir(self::$compile_dir)) {
-				trigger_error('the '.$compile_dir.' \''.self::$compile_dir.'\' does not exist, or is not a directory.', E_USER_ERROR);
+				trigger_error('the compile_dir \''.self::$compile_dir.'\' does not exist, or is not a directory.', E_USER_ERROR);
 				return false;
 			}
-			trigger_error('unable to write to '.$compile_dir.' \''.realpath(self::$compile_dir).'\'. Be sure '.$compile_dir.' is writable by the web server user.', E_USER_ERROR);
+			trigger_error('unable to write to compile_dir \''.realpath(self::$compile_dir).'\'. Be sure compile_dir is writable by the web server user.', E_USER_ERROR);
 			return false;
 		}
 		$_params = ['filename' => $params['compile_path'], 'contents' => $params['compiled_content']];

@@ -1,12 +1,12 @@
 {
 	"info": {
-		"_postman_id": "688fca12-c2aa-4989-b0b0-0699b8b300ad",
+		"_postman_id": "a49faddd-7c00-43d6-8f04-a8f02c2ee581",
 		"name": "Dar.Finance (Test)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "Common (Auth & User)",
+			"name": "Auth",
 			"item": [
 				{
 					"name": "auth.sendCode",
@@ -145,6 +145,301 @@
 							],
 							"path": [
 								"auth.logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "user.get",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "project",
+								"value": "{{project}}",
+								"type": "text"
+							},
+							{
+								"key": "v",
+								"value": "{{v}}",
+								"type": "text"
+							},
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/user.get",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user.get"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user.update - ошибка json-синтаксиса",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "v",
+								"value": "{{v}}",
+								"type": "text"
+							},
+							{
+								"key": "project",
+								"value": "{{project}}",
+								"type": "text"
+							},
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"first_name\": \"Иоанов\",\r\n    \"last_name\": \"\",\r\n    \"code\": \"поле - код какой-то - не мешает\",\r\n    \"phone\": \"79878972798989\".\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/user.update",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user.update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user.update - поля с ошибками",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "v",
+								"value": "{{v}}",
+								"type": "text"
+							},
+							{
+								"key": "project",
+								"value": "{{project}}",
+								"type": "text"
+							},
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"first_name\": \"\",\r\n    \"last_name\": \"\",\r\n    \"email\": \"test@TEST.ru\",\r\n    \"phone\": \"+56-47657567-enter\",\r\n    \"code\": \"поле - код какой-то - не мешает\",\r\n    \"midle_name\": \"Иоаннавич\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/user.update",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user.update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user.update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "v",
+								"value": "{{v}}",
+								"type": "text"
+							},
+							{
+								"key": "project",
+								"value": "{{project}}",
+								"type": "text"
+							},
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"first_name\": \"Вехоткин\",\r\n    \"last_name\": \"Петр\",\r\n    \"email\": \"UPPERCASE_NAME@TEST.ru\",\r\n    \"phone\": \"79457678687\",\r\n    \"code\": \"поле - код какой-то - не мешает\",\r\n    \"midle_name\": \"ошибочное имя поля\",\r\n    \"middle_name\": \"Сергеевич\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/user.update",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user.update"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notifications",
+			"item": [
+				{
+					"name": "notifications.get",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "project",
+								"value": "{{project}}",
+								"type": "text"
+							},
+							{
+								"key": "v",
+								"value": "{{v}}",
+								"type": "text"
+							},
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/notifications.get",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"notifications.get"
+							],
+							"query": [
+								{
+									"key": "viewed",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "notifications.read",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "v",
+								"value": "{{v}}",
+								"type": "text"
+							},
+							{
+								"key": "project",
+								"value": "{{project}}",
+								"type": "text"
+							},
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"title\": \"Заоголовк 1\",\r\n        \"description\": \"Текст сообщения\",\r\n        \"created\": \"1637338986\",\r\n        \"viewed\": \"0\"\r\n    },\r\n    {\r\n        \"title\": \"Metod user_update updated the database.\",\r\n        \"description\": \"first_name='Вехоткин', last_name='Петр', phone='79457678687', middle_name='Сергеевич', email='test@test.ru'\",\r\n        \"created\": \"1637339284\",\r\n        \"viewed\": \"0\"\r\n    },\r\n    {\r\n        \"title\": \"Metod user_update updated the database.\",\r\n        \"description\": \"first_name='Вехоткин', last_name='Петр', phone='79457678687', middle_name='Сергеевич', email='uppercase_name@test.ru'\",\r\n        \"created\": \"1637339605\",\r\n        \"viewed\": \"0\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/notifications.read",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"notifications.read"
 							]
 						}
 					},

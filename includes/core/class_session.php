@@ -101,7 +101,7 @@ class Session {
     private static function phone_attempts_code($user_id, $last_login, $attempts) {
         // clear
         if ((self::$ts - $last_login) > 3600) {
-            DB::query("UPDATE users SET login_attempts='0' WHERE user_id='".$user_id."' LIMIT 1;") or die (DB::error());
+            DB::query("UPDATE users SET phone_attempts_code='0' WHERE user_id='$user_id' LIMIT 1;") or die (DB::error());
             return 0;
         }
         // default

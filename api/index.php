@@ -39,7 +39,7 @@ $path = isset($url[0]) && $url[0] ? flt_input($url[0]) : '';
 // query
 
 if ($method == 'GET') isset($url[1]) ? parse_str($url[1], $query_raw) : $query_raw = [];
-else $query_raw = json_decode(file_get_contents('php://input'), true);
+else $query_raw = json_decode_w_throw(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
 if (!$query_raw && $_POST) $query_raw = $_POST;
 if (is_array($query_raw)) foreach ($query_raw as $key => $value) $query[flt_input($key)] = flt_input($value);
 
@@ -51,7 +51,6 @@ error_log($token);
 error_log(json_encode($query, JSON_UNESCAPED_UNICODE));
 
 // validate
-
 if (!$v) response(error_response(1002, 'Invalid request: v (version API) is required'));
 else if ($v != 1) response(error_response(1002, 'Invalid request: v (version API) is incorrect'));
 
@@ -70,8 +69,19 @@ else {
     if (isset($response['error_code'])) response($response);
     // routes (auth)
     if ($path == 'auth.logout') call('POST', $method, NULL, 'Session::logout');
+    $user_id = ['user_id' => Session::$user_id]; //too for security
     // routes (users)
-    // your methods here ...
+    if ($path == 'user.get') call('GET', $method, $user_id, 'User::user_info');
+    if ($path == 'user.update'){
+        $response = call('POST', $method, $user_id + $query, 'User::user_update', 0);
+        $note = ['title' => $response['message'], 'description' => $response['fields']];
+        Notification::add($user_id+$note);
+        response($response);
+    } 
+    // routes (notifications)
+    if ($path == 'notifications.get')  call('GET' , $method, $user_id + $query, 'Notification::notifications_get');
+    if ($path == 'notifications.read') call('POST', $method,            $query, 'Notification::notifications_read');
+    
     // routes (not found)
     response(error_response(1002, 'Application authorization failed: method is unavailable with service token.'));
 }
